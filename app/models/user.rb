@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  has_many :decks, dependent: :destroy
   validates :name,  presence: true, length: { maximum: 50 }
 
   before_save { self.email.downcase! }

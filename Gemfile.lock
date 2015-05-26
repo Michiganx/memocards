@@ -45,6 +45,8 @@ GEM
     bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
+    bootstrap-will_paginate (0.0.10)
+      will_paginate
     builder (3.2.2)
     byebug (3.4.0)
       columnize (~> 0.8)
@@ -199,6 +201,7 @@ GEM
     uglifier (2.5.3)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    will_paginate (3.0.7)
     win32console (1.3.2-x86-mingw32)
 
 PLATFORMS
@@ -207,6 +210,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt
   bootstrap-sass
+  bootstrap-will_paginate
   byebug (= 3.4.0)
   coffee-rails (= 4.1.0)
   coffee-script-source (= 1.8.0)
@@ -226,3 +230,4 @@ DEPENDENCIES
   turbolinks (= 2.3.0)
   tzinfo-data
   uglifier (= 2.5.3)
+  will_paginate
