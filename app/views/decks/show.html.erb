@@ -1,9 +1,193 @@
 <% provide(:title, @deck.name ) %>
 
+<%= javascript_include_tag 'flippant.min', 'data-turbolinks-track' => true %>
+<%= stylesheet_link_tag    'flippant', media: 'all', 'data-turbolinks-track' => true %>
+
 <h1><%= @deck.name %></h1>
 <h1><%= @cards_len %></h1>
+<script>
+  var cards = [];
+  var cards_back = [];
+  var indexer = 0;
+  var state = 0;
 
+  $(document).keydown(function(e){
+      if (e.keyCode == 37) {
+          Prev();
+      }
+      else if (e.keyCode == 39) {
+          Next();
+      }
+      else if (e.keyCode == 38) {
+          e.preventDefault();
+          if (state) Close(); else  Open();
+      }
+      else if (e.keyCode == 40) {
+          e.preventDefault();
+          Close();
+      }
+  });
+
+  function Open() {
+      if (state == 0) {
+          $('#flip-button').click();
+          state = 1;
+      }
+  }
+
+  function Close() {
+      if (state == 1) {
+          $('#close-card').click();
+          state = 0;
+      }
+  }
+
+  function Next() {
+      if (cards.length > 0) {
+          if (indexer+1 < cards.length) {
+
+              $('.front_card').fadeOut();
+              $('.flippant-back').fadeOut(400, function(){$('.flippant-back').remove();});
+
+              indexer += 1;
+              $('.front_card').promise().done(function(){
+                  $('#card_a').html(cards[indexer]);
+                  $('#card_b').html(cards_back[indexer]);
+
+                  $('.front_card').removeClass('flipped');
+                  $('.front_card').removeClass('flippant');
+                  $('.front_card').fadeIn();
+              });
+            if (state == 1) state = 0;
+          }
+      }
+
+      ToggleButs();
+  }
+
+  function Prev() {
+      if (cards.length > 0) {
+          if (indexer-1 >= 0) {
+              $('.front_card').fadeOut();
+              $('.flippant-back').fadeOut(400, function(){$('.flippant-back').remove();});
+
+              indexer -= 1;
+              $('.front_card').promise().done(function(){
+                  $('#card_a').html(cards[indexer]);
+                  $('#card_b').html(cards_back[indexer]);
+
+                  $('.front_card').removeClass('flipped');
+                  $('.front_card').removeClass('flippant');
+                  $('.front_card').fadeIn();
+              });
+              if (state == 1) state = 0;
+          }
+      }
+
+      ToggleButs();
+  }
+
+  function ToggleButs() {
+      if (indexer >= cards.length-1) document.getElementById('next-card').style.display = 'none';
+      else document.getElementById('next-card').style.display = 'block';
+      if (indexer <= 0) document.getElementById('prev-card').style.display = 'none';
+      else document.getElementById('prev-card').style.display = 'block';
+  }
+</script>
+
+<script>
 <% @deck.cards.each do |c| %>
-<p> <%= c.sidea %> ... <%= c.sideb %> </p>
+        cards.push('<%= c.sidea %>');
+        cards_back.push('<%= c.sideb %>');
 <%end%>
+</script>
+
+<style>
+    .front_card {
+        transform: perspective(500px) rotateY(0deg);
+        -moz-transform: perspective(500px) rotateY(0deg);
+        -webkit-transform: perspective(500px) rotateY(0deg);
+        background: rgba(230,230,230,0.7);
+        box-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        border-radius: 5px;
+        border: 1px solid #aaa;
+        padding: 14px;
+    }
+
+    .nice {
+        text-align:center;
+        font-family:Arial;
+        font-weight: bold;
+        margin:0 auto;
+        padding-top: 40px;
+    }
+    .niceb {
+        text-align:center;
+        font-family:Arial;
+        font-weight: bold;
+        margin:0 auto;
+        padding-top: 57px;
+    }
+</style>
+
+ <div style="min-height: 210px; width: 370px; z-index: 9999; height: auto;margin:0 auto;" class="front_card" onClick="if (state == 0) { state = 1; document.getElementById('flip-button').click();}">
+    <p id="card_a" class="nice"></p>
+    <p style="display:none;"><a id="flip-button" class="btnflip btn card" href="#">Card &raquo;</a></p>
+ </div>
+
+<a style="position:absolute;top:280px;float:left;font-size:80px;text-decoration:none;" id="prev-card" href="javascript:void(0)" onClick="Prev()" class="glyphicon glyphicon-arrow-left"></a>
+<a style="position:absolute;top:280px;right:80px;float:right;font-size:80px;text-decoration:none;" id="next-card" href="javascript:void(0)" onclick="Next()" class="glyphicon glyphicon-arrow-right"></a>
+<div style="clear:both;"></div>
+
+
+<div id="card_b" style="display:none;">
+</div>
+
+<script>
+    if (cards.length > 0) {
+        document.getElementById('card_a').innerHTML = cards[indexer];
+        document.getElementById('card_b').innerHTML = cards_back[indexer];
+        ToggleButs();
+    }
+</script>
+
+<script>
+    ;(function(e,t,n){function i(n,s){if(!t[n]){if(!e[n]){var o=typeof require=="function"&&require;if(!s&&o)return o(n,!0);if(r)return r(n,!0);throw new Error("Cannot find module '"+n+"'")}var u=t[n]={exports:{}};e[n][0].call(u.exports,function(t){var r=e[n][1][t];return i(r?r:t)},u,u.exports)}return t[n].exports}var r=typeof require=="function"&&require;for(var s=0;s<n.length;s++)i(n[s]);return i})({1:[function(require,module,exports){
+// index.js
+
+        var flip = flippant.flip
+        var event = require('./event')
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btnflip')) {
+                e.preventDefault()
+                var flipper = e.target.parentNode.parentNode
+                var back
+                var input = ''
+                var textarea = '<button style="display:none;" class="btn" id="close-card">Back</button>'
+
+                if (e.target.classList.contains('card')) {
+                    back = flip(flipper, document.getElementById('card_b').innerHTML + textarea)
+                } else {
+                    back = flip(flipper, document.getElementById('card_b').innerHTML + textarea, 'modal')
+                }
+
+                back.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('btn')) {
+                        event.trigger(back, 'close')
+                    }
+                })
+
+            }
+        })
+
+
+    },{"./event":2}],2:[function(require,module,exports){
+        exports.trigger = function(elm, event_name, data) {
+            var evt = new CustomEvent(event_name, data)
+            elm.dispatchEvent(evt)
+        }
+    },{}]},{},[1])
+    ;
+</script>
 
