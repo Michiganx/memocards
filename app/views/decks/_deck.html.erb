@@ -12,11 +12,16 @@
     <span class="timestamp">
     Edited <%= time_ago_in_words(deck.updated_at) %> ago.
   </span>
-  <% if current_user?(deck.user) %>
-      <%= link_to "delete", deck, method: :delete,
-                  data: { confirm: "You sure?" } %>
-      <%= link_to "edit", edit_deck_path( deck ) %>
-      <%else%>
-  <%= link_to "steal", steal_deck_path( deck )%>
+
+  <% if  logged_in? %>
+        <% if current_user?(deck.user) %>
+              <%= link_to "delete", deck, method: :delete,
+                          data: { confirm: "You sure?" } %>
+              <%= link_to "edit", edit_deck_path( deck ) %>
+              <%else%>
+
+        <%= link_to "steal", steal_deck_path( deck )%>
+          <% end %>
   <% end %>
+
 </li>

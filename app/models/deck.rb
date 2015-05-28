@@ -9,7 +9,7 @@ class Deck < ActiveRecord::Base
   def deep_clone
     new_deck = self.dup
     self.cards.each do |c|
-      new_deck.cards << c
+      new_deck.cards << c.dup
     end
     new_deck
   end
