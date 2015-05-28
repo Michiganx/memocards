@@ -17,6 +17,11 @@ gem 'bcrypt'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 
+gem 'haml'
+gem 'haml-rails'
+gem 'cocoon'
+gem 'formtastic'
+
 
 group :development, :test do
   gem 'sqlite3'

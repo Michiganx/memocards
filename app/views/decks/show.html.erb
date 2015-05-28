@@ -1,0 +1,9 @@
+<% provide(:title, @deck.name ) %>
+
+<h1><%= @deck.name %></h1>
+<h1><%= @cards_len %></h1>
+
+<% @deck.cards.each do |c| %>
+<p> <%= c.sidea %> ... <%= c.sideb %> </p>
+<%end%>
+

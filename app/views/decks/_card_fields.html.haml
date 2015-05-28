@@ -1,0 +1,9 @@
+.nested-fields
+  = f.inputs do
+    .field
+      = f.label :sidea
+      = f.input :sidea
+    .field
+      = f.label :sideb
+      = f.input :sideb
+    = link_to_remove_association "remove card", f

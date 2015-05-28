@@ -1,0 +1,16 @@
+= semantic_form_for @deck do |f|
+  = f.inputs do
+    .field
+      = f.label :name
+      = f.input :name
+    .field
+      = f.label :description
+      = f.input :description
+    %h3 Cards
+    #cards
+      = f.semantic_fields_for :cards do |c|
+        = render 'card_fields', :f => c
+      .links
+        = link_to_add_association 'add card', f, :cards
+    = f.actions do
+      = f.action :submit
