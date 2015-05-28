@@ -1,12 +1,17 @@
 <li id="deck-<%= deck.id %>">
-  <span class="user"><%= link_to deck.user.name, deck.user %></span>
   <span class="name"><%= link_to deck.name, deck %></span>
+  <span class="text-justify">
+    <%= deck.description %>
+  </span>
   <span class="timestamp">
     Created <%= time_ago_in_words(deck.created_at) %> ago.
-    <% if current_user?(deck.user) %>
+  </span>
+    <span class="timestamp">
+    Edited <%= time_ago_in_words(deck.updated_at) %> ago.
+  </span>
+  <% if current_user?(deck.user) %>
       <%= link_to "delete", deck, method: :delete,
                   data: { confirm: "You sure?" } %>
-        <%= link_to "edit", edit_deck_path( deck ) %>
-    <% end %>
-  </span>
+      <%= link_to "edit", edit_deck_path( deck ) %>
+  <% end %>
 </li>

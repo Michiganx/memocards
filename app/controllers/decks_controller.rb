@@ -30,7 +30,7 @@ class DecksController < ApplicationController
 
   def update
     @deck = Deck.find(params[:id])
-      @deck = current_user.decks.build(deck_params)
+    @deck.update_attributes(deck_params)
       if @deck.save
         flash[:success] = "Deck updated!"
         redirect_to @deck
