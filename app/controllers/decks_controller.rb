@@ -17,7 +17,6 @@ class DecksController < ApplicationController
   end
 
 
-
   def show
     @deck = Deck.find(params[:id])
     @cards = @deck.cards.all
@@ -43,6 +42,19 @@ class DecksController < ApplicationController
     @deck.destroy
     flash[:success] = "Deck deleted"
     redirect_to request.referrer || root_url
+  end
+
+  def steal
+    @deck_old = Deck.find(params[:id])
+    @deck_new = @deck_old.deep_clone
+    current_user.decks << @deck_new
+
+    redirect_to current_user
+
+    # @experiment_new = @experiment_old.clone
+    # @experiment_old.trials.each do |trial|
+    #   @experiment_new.trials << trial.clone
+    # end
   end
 
   private

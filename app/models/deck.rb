@@ -6,4 +6,12 @@ class Deck < ActiveRecord::Base
   validates :user_id, presence: true
   validates :name,  presence: true, length: { maximum: 120 }
 
+  def deep_clone
+    new_deck = self.dup
+    self.cards.each do |c|
+      new_deck.cards << c
+    end
+    new_deck
+  end
+
 end
