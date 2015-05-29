@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :decks do
+    resources :cards
     member do
     get 'steal'
       end

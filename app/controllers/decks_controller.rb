@@ -2,6 +2,23 @@ class DecksController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user,   only: :destroy
 
+
+  def index
+    # @decks = Deck.all unless params.has_key?(:user_id) else User.find(params[:user_id]).decks.all
+    @decks =
+    if params.has_key? :owner_id
+        User.find(params[:owner_id]).decks.all
+    else
+      Deck.all
+    end
+
+    respond_to do |format|
+      # format.html
+      format.json { render json: @decks}
+      format.xml { render xml: @decks}
+    end
+  end
+
   def new
     @deck = Deck.new
   end
@@ -21,6 +38,12 @@ class DecksController < ApplicationController
     @deck = Deck.find(params[:id])
     @cards = @deck.cards.all
     @cards_len = @cards.length
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @deck, include: :cards}
+      format.xml { render xml: @deck, include: :cards}
+    end
   end
 
   def edit
