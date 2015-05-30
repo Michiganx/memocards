@@ -1,5 +1,23 @@
 == README
 
+=API
+
+=Accepted headers
+* Accept: application/json
+* Accept: application/xml
+
+Base URL
+https://warm-castle-7655.herokuapp.com/
+
+PATHS
+
+|HTTP method| url | result|
+|-----------|-----|-------|
+|GET |.../users/| all users|
+|GET |.../decks/| all decks|
+|GET |.../decks?owner_id=3| all decks for user with id 3|
+|GET |.../decks/4 | deck with id 4|
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
